@@ -2,13 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "(lldb) Attach",
+      "type": "cppdbg",
+      "request": "attach",
+      "program": "enter program name, for example ${workspaceFolder}/a.out",
+      "MIMode": "lldb"
+    },
+    {
       "name": "C/C++ Runner: Debug Session",
       "type": "lldb",
       "request": "launch",
-      "args": ["argument1", "argument2"],  // Arguments for your program
-      "cwd": "/Users/margarita/Documents/210labs/210labs/SDLC",
-      "program": "/Users/margarita/Documents/210labs/210labs/SDLC/build/Debug/outDebug",
-      "preLaunchTask": "build"  // Optional: specify a task to build the executable
+      "args": [],
+      "cwd": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory",
+      "program": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/build/Debug/outDebug"
     }
   ]
 }

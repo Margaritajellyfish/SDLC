@@ -59,6 +59,9 @@
   "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
     "iostream": "cpp",
-    "list": "cpp"
+    "list": "cpp",
+    "array": "cpp",
+    "iosfwd": "cpp",
+    "map": "cpp"
   }
 }
