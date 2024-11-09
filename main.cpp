@@ -9,6 +9,30 @@ int econ() {
     return rate;
 }
 
+
+void populateRandomJobs(const vector<string>& joblist) {
+
+    srand(static_cast<unsigned int>(time(0)));
+
+
+    int numJobs = rand() % 11 + 10; 
+
+    for (int i = 0; i < numJobs; ++i) {
+        int randomIndex = rand() % joblist.size();
+        jobList.push_back(joblist[randomIndex]);
+    }
+
+    map<string, int> jobCount;
+    for (const auto& job : jobList) {
+        jobCount[job]++;
+    }
+
+    cout << "Job Counts:" << std::endl;
+    for (const auto& entry : jobCount) {
+        cout << entry.first << ": " << entry.second << endl;
+    }
+}
+
 void policy(map<string, array<list<int>, 3>>& jobMarket,int rate) {
     int randomChance = rand() % 100;
     randomChance = randomChance + rate;
@@ -19,9 +43,16 @@ void policy(map<string, array<list<int>, 3>>& jobMarket,int rate) {
         }
         cout << "Policy: Closed job market for international students.\n";
     }  
-    if(randomChance > 3 && randomChance < 40){
+    else if(randomChance > 3 && randomChance < 40){
         
         cout << "Policy: Tax benefits for hiring more employees.\n";
+        for (auto& company : jobMarket) {
+            for (auto& jobList : company.second) {
+                for (auto& job : jobList) {
+                    job += 5; 
+                }
+            }
+        }
     }
 
 int tech(int rate) {
@@ -43,7 +74,25 @@ int tech(int rate) {
 
 
 int mian(){
-srand(static_cast<unsigned int>(time(0)));
+    vector<string> jobList;
+    ifstream inputFile("testing.txt");
+    if (!inputFile) {
+        cerr << "Error: Unable to open file." << endl;
+        return 1;
+    }
+    while (inputFile >> companyName >> jobCategory) {
+        
+        inputFile.ignore();
+        getline(inputFile, jobTitle);
+        jobList.push_back(jobTitle);
+    }
+
+    inputFile.close();
+
+    srand(static_cast<unsigned int>(time(0)));
+    int randomIndex = rand() % jobList.size();
+    string randomJob = jobList[randomIndex];
+
 map<string, array<list<int>, 3>> jobMarket;
 jobMarket["Orange"] = {
 list<int>{100, 120}, 
@@ -76,14 +125,29 @@ list<int>{5, 10}
 };
 
 
-for (int i = 0; i < 36; ++i) {
-    cout << "\n--- Time Period " << (i + 1) << " ---\n";
-    int economicRate = econ();
-    cout << "Economic rate change: " << economicRate << "%\n";
-    policy(jobMarket);
+ for (int i = 0; i < 36; ++i) {
+        cout << "\n--- Time Period " << (i + 1) << " ---\n";
 
-    tech();
-    }
+        int economicRate = econ();
+        cout << "Economic rate change: " << economicRate << "%\n";
+
+        policy(jobMarket, economicRate);
+
+        int techImpact = tech(economicRate);
+        cout << "Tech impact: " << techImpact << "%\n";
+
+        for (const auto& company : jobMarket) {
+            cout << "Company: " << company.first << "\n";
+            int categoryIndex = 1;
+            for (const auto& jobList : company.second) {
+                cout << "  Job Category " << categoryIndex++ << ": ";
+                for (const auto& job : jobList) {
+                    cout << job << " ";
+                }
+                cout << "\n";
+            }
+        }
+ }
 
 return 0;
 }
