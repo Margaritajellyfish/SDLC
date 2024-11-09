@@ -9,31 +9,41 @@ int econ() {
     return rate;
 }
 
-void policy(map<string, array<list<int>, 3>>& jobMarket) {
+void policy(map<string, array<list<int>, 3>>& jobMarket,int rate) {
     int randomChance = rand() % 100;
+    randomChance = randomChance + rate;
     if (randomChance < 3) {
         
         for (auto& company : jobMarket) {
-            company.second[2].clear(); 
+            company.second[2] = 0; 
         }
         cout << "Policy: Closed job market for international students.\n";
-    } else {
+    }  
+    if(randomChance > 3 && randomChance < 40){
         
         cout << "Policy: Tax benefits for hiring more employees.\n";
     }
 
-/*
-tech(){
-if new product
-else if newtechnology
-else sale decrease;
+int tech(int rate) {
+    int randomEvent = rand() % 3;
+    int randomChance = rand() % 100;
+    if (randomEvent == 0) {
+        randomChance += (rate*2)
 
+        cout << "Tech: New product release boosts job opportunities.\n";
+    } else if (randomEvent == 1) {
+        if (rate >0){randomChance += rate;}
+        cout << "Tech: Adoption of new technology improves efficiency.\n";
+    } else {
+        randomChance = 0 - randomChande;
+        cout << "Tech: Sales decrease, leading to reduced hiring.\n";
+    }
+    return radomChance;
 }
-*/
+
 
 int mian(){
-/*
-creat the map
+srand(static_cast<unsigned int>(time(0)));
 map<string, array<list<int>, 3>> jobMarket;
 jobMarket["Orange"] = {
 list<int>{100, 120}, 
@@ -65,11 +75,15 @@ list<int>{45, 50},
 list<int>{5, 10}      
 };
 
-run 36 times;
 
+for (int i = 0; i < 36; ++i) {
+    cout << "\n--- Time Period " << (i + 1) << " ---\n";
+    int economicRate = econ();
+    cout << "Economic rate change: " << economicRate << "%\n";
+    policy(jobMarket);
 
+    tech();
+    }
 
-
-*/
 return 0;
 }
