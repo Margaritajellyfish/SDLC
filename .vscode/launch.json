@@ -5,9 +5,10 @@
       "name": "C/C++ Runner: Debug Session",
       "type": "lldb",
       "request": "launch",
-      "args": [],
+      "args": ["argument1", "argument2"],  // Arguments for your program
       "cwd": "/Users/margarita/Documents/210labs/210labs/SDLC",
-      "program": "/Users/margarita/Documents/210labs/210labs/SDLC/build/Debug/outDebug"
+      "program": "/Users/margarita/Documents/210labs/210labs/SDLC/build/Debug/outDebug",
+      "preLaunchTask": "build"  // Optional: specify a task to build the executable
     }
   ]
 }
