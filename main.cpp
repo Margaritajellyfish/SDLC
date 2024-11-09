@@ -18,11 +18,12 @@ void runRanJobs(vector<string> joblist, list<string> &category) {
     srand(static_cast<unsigned int>(time(0)));
 
     int numJobs = rand() % 11 + 10; 
-
+    
     for (int i = 0; i < numJobs; ++i) {
-        int randomIndex = rand() % joblist.size();
-        category.push_back(joblist[randomIndex]);
-    }
+    size_t randomIndex = rand() % joblist.size();  
+    category.push_back(joblist[randomIndex]);
+}
+
 }
 
 using JobCategories = array<list<string>, 3>;

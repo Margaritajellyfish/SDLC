@@ -13,8 +13,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory",
-      "program": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/build/Debug/outDebug"
+      "cwd": "/Users/margarita/Documents/210labs/210labs/SDLC",
+      "program": "/Users/margarita/Documents/210labs/210labs/SDLC/build/Debug/outDebug"
     }
   ]
 }
