@@ -1,18 +1,26 @@
 #include <iostream>
-/*
-economy fuction
-int econ(){
-int rate;
--10 to +10%
-return rate;}
-*/
+#include <ctime> 
+#include <map>
+#include <array>
+#include <list>
 
-/*
- policy(){
-3% chance for the market to close job for international students;
-tax benifits for hiring
+int econ() {
+    int rate = rand() % 21 - 10;  
+    return rate;
+}
 
-}*/
+void policy(map<string, array<list<int>, 3>>& jobMarket) {
+    int randomChance = rand() % 100;
+    if (randomChance < 3) {
+        
+        for (auto& company : jobMarket) {
+            company.second[2].clear(); 
+        }
+        cout << "Policy: Closed job market for international students.\n";
+    } else {
+        
+        cout << "Policy: Tax benefits for hiring more employees.\n";
+    }
 
 /*
 tech(){
