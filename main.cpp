@@ -1,56 +1,65 @@
 #include <iostream>
 #include <fstream>
-#include <ctime> 
+#include <ctime>
 #include <map>
 #include <array>
 #include <list>
 #include <vector>
-#include <cmath>  
+#include <cmath>
+#include <algorithm> 
 
 using namespace std;
 
+
 int econ() {
-    int rate = rand() % 21 - 10;  
+    int rate = rand() % 21 - 10;
     return rate;
 }
 
-void runRanJobs(vector<string> joblist, list<string> &category) {
-    srand(static_cast<unsigned int>(time(0)));
+void runRanJobs(const vector<string>& joblist, list<string> &category) {
+    int numJobs = rand() % 11 + 10;
 
-    int numJobs = rand() % 11 + 10; 
-    
     for (int i = 0; i < numJobs; ++i) {
-    size_t randomIndex = rand() % joblist.size();  
-    category.push_back(joblist[randomIndex]);
-}
-
+        size_t randomIndex = rand() % joblist.size();
+        category.push_back(joblist[randomIndex]);
+    }
 }
 
 using JobCategories = array<list<string>, 3>;
 using JobMarket = map<string, JobCategories>;
 
-void policy(JobMarket &jobMarket, int rate) {
+void policy(JobMarket &jobMarket, int rate, const vector<string>& jobList) {
     int randomChance = rand() % 100;
     randomChance += rate;
 
     if (randomChance < 3) {
+        
         for (auto& company : jobMarket) {
-            company.second[2].clear(); 
+            company.second[2].clear();
         }
         cout << "Policy: Closed job market for international students.\n";
     } else if (randomChance > 3 && randomChance < 40) {
+        
         cout << "Policy: Tax benefits for hiring more employees.\n";
         for (auto& company : jobMarket) {
-            for (auto& jobList : company.second) {
-                for (auto& job : jobList) {
-                    job += " (Tax Benefit)";  
-                }
-            }   
+            for (auto& jobListCategory : company.second) {
+                size_t randomIndex = rand() % jobList.size();
+                jobListCategory.push_back(jobList[randomIndex]);
+            }
+        }
+    } else if (randomChance >= 40 && randomChance < 60) {
+        
+        cout << "Policy: Reopened job market for international students.\n";
+        for (auto& company : jobMarket) {
+            
+            size_t randomIndex = rand() % jobList.size();
+            company.second[2].push_back(jobList[randomIndex]);
         }
     }
 }
 
-void tech(JobMarket &jobMarket, int rate){
+
+void tech(JobMarket &jobMarket, int rate, const vector<string>& jobList) {
     int randomEvent = rand() % 3;
     int randomChance = rand() % 100;
 
@@ -68,17 +77,24 @@ void tech(JobMarket &jobMarket, int rate){
     }
 
     for (auto &company : jobMarket) {
-        for (auto &jobList : company.second) {
-            int currentSize = jobList.size();
+        for (auto &jobListCategory : company.second) {
+            int currentSize = jobListCategory.size();
             int adjustment = static_cast<int>(round(currentSize * rate / 100.0));
+
+            
+            if (currentSize == 0 && rate > 0) {
+                adjustment = max(1, static_cast<int>(round(rate / 10.0)));
+            }
+
             if (adjustment > 0) {
                 for (int i = 0; i < adjustment; ++i) {
-                    jobList.push_back("New Tech Job");
+                    size_t randomIndex = rand() % jobList.size();
+                    jobListCategory.push_back(jobList[randomIndex]);
                 }
             } else if (adjustment < 0) {
                 adjustment = abs(adjustment);
-                for (int i = 0; i < adjustment && !jobList.empty(); ++i) {
-                    jobList.pop_back();
+                for (int i = 0; i < adjustment && !jobListCategory.empty(); ++i) {
+                    jobListCategory.pop_back();
                 }
             }
         }
@@ -86,66 +102,53 @@ void tech(JobMarket &jobMarket, int rate){
 }
 
 int main() {
-
     JobMarket jobMarket;
     vector<string> jobList;
     ifstream inputFile("testing.txt");
+
     if (!inputFile) {
-        cerr << "Error: Unable to open file." << endl;
+        cerr << "Error: Unable to open file 'testing.txt'." << endl;
         return 1;
     }
 
     string jobTitle;
     while (getline(inputFile, jobTitle)) {
-        jobList.push_back(jobTitle);
+        if (!jobTitle.empty()) {
+            jobList.push_back(jobTitle);
+        }
     }
 
     inputFile.close();
 
+    
     srand(static_cast<unsigned int>(time(0)));
-  
 
-    jobMarket["Orange"] = { list<string>(), list<string>(), list<string>() };
-    runRanJobs(jobList, jobMarket["Orange"][0]);
-    runRanJobs(jobList, jobMarket["Orange"][1]);
-    runRanJobs(jobList, jobMarket["Orange"][2]);
+    
+    vector<string> companyNames = {"Orange", "MacroH", "Booble", "CompanyC", "stardown"};
+    for (const auto& companyName : companyNames) {
+        jobMarket[companyName] = {list<string>(), list<string>(), list<string>()};
+        runRanJobs(jobList, jobMarket[companyName][0]);
+        runRanJobs(jobList, jobMarket[companyName][1]);
+        runRanJobs(jobList, jobMarket[companyName][2]);
+    }
 
-    jobMarket["MacroH"] = { list<string>(), list<string>(), list<string>() };
-    runRanJobs(jobList, jobMarket["MacroH"][0]);
-    runRanJobs(jobList, jobMarket["MacroH"][1]);
-    runRanJobs(jobList, jobMarket["MacroH"][2]);
-
-    jobMarket["Booble"] = { list<string>(), list<string>(), list<string>() };
-    runRanJobs(jobList, jobMarket["Booble"][0]);
-    runRanJobs(jobList, jobMarket["Booble"][1]);
-    runRanJobs(jobList, jobMarket["Booble"][2]);
-
-    jobMarket["CompanyC"] = { list<string>(), list<string>(), list<string>() };
-    runRanJobs(jobList, jobMarket["CompanyC"][0]);
-    runRanJobs(jobList, jobMarket["CompanyC"][1]);
-    runRanJobs(jobList, jobMarket["CompanyC"][2]);
-
-    jobMarket["stardown"] = { list<string>(), list<string>(), list<string>() };
-    runRanJobs(jobList, jobMarket["stardown"][0]);
-    runRanJobs(jobList, jobMarket["stardown"][1]);
-    runRanJobs(jobList, jobMarket["stardown"][2]);
-
-
+    
     for (int i = 0; i < 36; ++i) {
         cout << "\n--- Time Period " << (i + 1) << " ---\n";
 
         int economicRate = econ();
         cout << "Economic rate change: " << economicRate << "%\n";
 
-        policy(jobMarket, economicRate);
-        tech(jobMarket ,economicRate);
+        policy(jobMarket, economicRate, jobList);
+        tech(jobMarket, economicRate, jobList);
 
+        
         for (const auto& company : jobMarket) {
             cout << "Company: " << company.first << "\n";
             int categoryIndex = 1;
-            for (const auto& jobList : company.second) {
+            for (const auto& jobListCategory : company.second) {
                 cout << "  Job Category " << categoryIndex++ << ": ";
-                for (const auto& job : jobList) {
+                for (const auto& job : jobListCategory) {
                     cout << job << " ";
                 }
                 cout << "\n";
@@ -154,5 +157,3 @@ int main() {
     }
     return 0;
 }
-
-
